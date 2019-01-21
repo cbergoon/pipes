@@ -100,22 +100,40 @@ func NewPipelineFromPipelineDefinition(definition *PipelineDefinition, stateChan
 	for _, proc := range definition.Processes {
 		//TODO: Create a factory to replace conditional logic.
 		if proc.TypeName == "Http" {
-			pipeline.AddProcess(proc.ProcessName, NewHttpProcess(proc.ProcessName, proc.Inputs, proc.Outputs, proc.State), proc.Sink)
+			err := pipeline.AddProcess(proc.ProcessName, NewHttpProcess(proc.ProcessName, proc.Inputs, proc.Outputs, proc.State), proc.Sink)
+			if err != nil {
+				return nil, errors.Wrapf(err, "could not create pipeline; specified process %s of type %s could not be created", proc.ProcessName, proc.TypeName)
+			}
 		} else if proc.TypeName == "JSONFileReader" {
-			pipeline.AddProcess(proc.ProcessName, NewJSONFileReaderProcess(proc.ProcessName, proc.Inputs, proc.Outputs, proc.State), proc.Sink)
+			err := pipeline.AddProcess(proc.ProcessName, NewJSONFileReaderProcess(proc.ProcessName, proc.Inputs, proc.Outputs, proc.State), proc.Sink)
+			if err != nil {
+				return nil, errors.Wrapf(err, "could not create pipeline; specified process %s of type %s could not be created", proc.ProcessName, proc.TypeName)
+			}
 		} else if proc.TypeName == "Printer" {
-			pipeline.AddProcess(proc.ProcessName, NewPrinterProcess(proc.ProcessName, proc.Inputs, proc.Outputs, proc.State), proc.Sink)
+			err := pipeline.AddProcess(proc.ProcessName, NewPrinterProcess(proc.ProcessName, proc.Inputs, proc.Outputs, proc.State), proc.Sink)
+			if err != nil {
+				return nil, errors.Wrapf(err, "could not create pipeline; specified process %s of type %s could not be created", proc.ProcessName, proc.TypeName)
+			}
 		} else if proc.TypeName == "Generator" {
-			pipeline.AddProcess(proc.ProcessName, NewGeneratorProcess(proc.ProcessName, proc.Inputs, proc.Outputs, proc.State), proc.Sink)
+			err := pipeline.AddProcess(proc.ProcessName, NewGeneratorProcess(proc.ProcessName, proc.Inputs, proc.Outputs, proc.State), proc.Sink)
+			if err != nil {
+				return nil, errors.Wrapf(err, "could not create pipeline; specified process %s of type %s could not be created", proc.ProcessName, proc.TypeName)
+			}
 		} else if proc.TypeName == "DynamicJS" {
-			pipeline.AddProcess(proc.ProcessName, NewDynamicJsProcess(proc.ProcessName, proc.Inputs, proc.Outputs, proc.State), proc.Sink)
+			err := pipeline.AddProcess(proc.ProcessName, NewDynamicJsProcess(proc.ProcessName, proc.Inputs, proc.Outputs, proc.State), proc.Sink)
+			if err != nil {
+				return nil, errors.Wrapf(err, "could not create pipeline; specified process %s of type %s could not be created", proc.ProcessName, proc.TypeName)
+			}
 		} else {
-			return nil, errors.Errorf("could not create pipeline; specified process type does not exist: %s", proc.TypeName)
+			return nil, errors.Errorf("could not create pipeline; specified process of type %s does not exist", proc.TypeName)
 		}
 	}
 	pipeline.Initialize()
 	for _, conn := range definition.Connections {
-		pipeline.Connect(conn.OriginProcessName, conn.OriginPortName, conn.DestinationProcessName, conn.DestinationPortName)
+		err := pipeline.Connect(conn.OriginProcessName, conn.OriginPortName, conn.DestinationProcessName, conn.DestinationPortName)
+		if err != nil {
+			return nil, errors.Wrapf(err, "could not create pipeline; connection from %s:%s to %s:%s could not be created", conn.OriginProcessName, conn.OriginPortName, conn.DestinationProcessName, conn.DestinationPortName)
+		}
 	}
 	return pipeline, nil
 }
@@ -123,7 +141,7 @@ func NewPipelineFromPipelineDefinition(definition *PipelineDefinition, stateChan
 func (f *FlowPipeline) AddProcess(name string, process Process, sink bool) error {
 	process.GetFlowProcess().PipelineRef = f
 	if _, ok := f.Processes[name]; ok {
-		return errors.Errorf("could not add process due to duplicate name: %s", name)
+		return errors.Errorf("could not add process due to duplicate name %s", name)
 	}
 	f.Processes[name] = process
 	if sink {
@@ -136,12 +154,12 @@ func (f *FlowPipeline) Connect(originProcess, originPort string, destinationProc
 	//Get Origin Process
 	op, ok := f.Processes[originProcess]
 	if !ok {
-		errors.Errorf("could not connect origin process not found: %s", destinationProcess)
+		return errors.Errorf("could not connect origin process %s not found", originProcess)
 	}
 	//Get Destination Process
 	dp, ok := f.Processes[destinationProcess]
 	if !ok {
-		errors.Errorf("could not connect destination process not found: %s", destinationProcess)
+		return errors.Errorf("could not connect destination process %s not found", destinationProcess)
 	}
 	//Set the Input Channel of the Destination Process to the Output Channel of the Origin Process
 	dp.GetFlowProcess().SetInputChannelByName(destinationPort, op.GetFlowProcess().GetOutputChannelByName(originPort))
