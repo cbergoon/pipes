@@ -18,10 +18,11 @@ type PrinterProcess struct {
 
 func NewPrinterProcess(processName string, inputs, outputs []string, state map[string]string) *PrinterProcess {
 	return &PrinterProcess{
-		Inputs:      inputs,
-		Outputs:     outputs,
-		FlowProcess: NewFlowProcess("Printer"),
-		ProcessName: processName,
+		Inputs:       inputs,
+		Outputs:      outputs,
+		InitialState: state,
+		FlowProcess:  NewFlowProcess("Printer"),
+		ProcessName:  processName,
 	}
 }
 

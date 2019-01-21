@@ -12,14 +12,14 @@ type GeneratorProcess struct {
 
 	InitialState map[string]string
 
-	Inputs      []string
-	Outputs     []string
+	Inputs  []string
+	Outputs []string
 }
 
 func NewGeneratorProcess(processName string, inputs, outputs []string, state map[string]string) *GeneratorProcess {
 	return &GeneratorProcess{
-		Inputs: inputs,
-		Outputs: outputs,
+		Inputs:      inputs,
+		Outputs:     outputs,
 		FlowProcess: NewFlowProcess("Generator"),
 		ProcessName: processName,
 	}

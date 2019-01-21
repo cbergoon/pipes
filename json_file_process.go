@@ -1,10 +1,10 @@
 package pipes
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"path/filepath"
-	"io/ioutil"
-	"encoding/json"
 )
 
 const (
@@ -33,7 +33,7 @@ func NewJSONFileReaderProcess(processName string, inputs, outputs []string, stat
 		Outputs:      outputs,
 		InitialState: state,
 		ProcessName:  processName,
-		FlowProcess: NewFlowProcess("JSONFileReader"),
+		FlowProcess:  NewFlowProcess("JSONFileReader"),
 	}
 }
 
@@ -63,7 +63,7 @@ func (c *JSONFileReaderProcess) Run() {
 
 	for _, f := range files {
 		matched, _ := filepath.Match(fileFilter, f.Name())
-		if (matched) {
+		if matched {
 			content, err := ioutil.ReadFile(f.Name())
 			if err != nil {
 				//add error and continue

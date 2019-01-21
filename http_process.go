@@ -1,10 +1,10 @@
 package pipes
 
 import (
-	"encoding/json"
-	"net/http"
 	"bytes"
+	"encoding/json"
 	"io/ioutil"
+	"net/http"
 	"time"
 )
 
@@ -43,7 +43,7 @@ func (c *HttpProcess) Run() {
 			config := &HttpProcessConfig{}
 			err := json.Unmarshal([]byte(configJson), config)
 			if err != nil {
-
+				//TODO: Error
 			}
 
 			if config.Method == "GET" || config.Method == "POST" || config.Method == "PUT" || config.Method == "PATCH" {
@@ -65,13 +65,16 @@ func (c *HttpProcess) Run() {
 				client.Timeout = time.Second * 60
 				resp, err := client.Do(req)
 				if err != nil {
-
+					//TODO: Error
 				}
 
 				body, _ := ioutil.ReadAll(resp.Body)
 				c.FlowProcess.Outputs[c.Outputs[0]] <- string(body)
 
-				resp.Body.Close()
+				err = resp.Body.Close()
+				if err != nil {
+					//TODO: Error
+				}
 			}
 		}
 	} else {
@@ -85,12 +88,12 @@ func (c *HttpProcess) Run() {
 		//}
 		configJson, ok := c.InitialState["config"]
 		if !ok {
-
+			//TODO: Error
 		}
 		config := &HttpProcessConfig{}
 		err := json.Unmarshal([]byte(configJson), config)
 		if err != nil {
-
+			//TODO: Error
 		}
 
 		if config.Method == "GET" || config.Method == "POST" || config.Method == "PUT" || config.Method == "PATCH" {
@@ -114,11 +117,16 @@ func (c *HttpProcess) Run() {
 			client.Timeout = time.Second * 60
 			resp, err := client.Do(req)
 			if err != nil {
-
+				//TODO: Error
 			}
-			defer resp.Body.Close()
+
 			body, _ := ioutil.ReadAll(resp.Body)
 			c.FlowProcess.Outputs[c.Outputs[0]] <- string(body)
+
+			err = resp.Body.Close()
+			if err != nil {
+				//TODO: Error
+			}
 		}
 	}
 
