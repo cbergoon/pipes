@@ -26,9 +26,9 @@ type ConnectionDefinition struct {
 }
 
 type PipelineDefinition struct {
-	Pipeline    PipelineInfoDefinition `json:"pipeline"`
-	Processes   []ProcessDefinition    `json:"processes"`
-	Connections []ConnectionDefinition `json:"connections"`
+	Pipeline    *PipelineInfoDefinition `json:"pipeline"`
+	Processes   []*ProcessDefinition    `json:"processes"`
+	Connections []*ConnectionDefinition `json:"connections"`
 }
 
 func NewPipelineDefinitionFromJson(definition []byte) (*PipelineDefinition, error) {
