@@ -18,6 +18,10 @@ defined. For now Pipes is an experimental library.
 * Customizable state changed handler.
 * Process level error reporting.
 * FUTURE: External plugin system for process blocks running as their own process in any language.
+* FUTURE: Built-in database processes.
+
+NEW: A definition language for pipes called [pipes-dl](github.com/cbergoon/pipes-dl) is also available. This provides a simple
+DSL that can be used to define a pipeline.
 
 #### Installation
 
@@ -35,7 +39,23 @@ import "github.com/cbergoon/pipes"
 
 #### Documentation
 
+A Pipes pipeline consists of two main concepts: processes and connections. As you might have guessed a processes are
+are linked and communicate via connections to form a pipeline. These connections also define the process graph which
+define the flow of messages and execution through the pipeline.
 
+##### Processes
+
+###### JSON File Process
+
+###### HTTP Process
+
+###### DynamicJs Process
+
+##### Connections
+
+##### Pipelines
+
+##### JSON Pipeline Definition
 
 #### Example Usage
 
@@ -49,3 +69,10 @@ import "github.com/cbergoon/pipes"
     }
 ```
 
+#### Contributions
+
+All contributions are welcome.
+
+#### License
+
+This project is licensed under the MIT License.
