@@ -69,13 +69,13 @@ Pipelines represent the entire flow through the application.
 #### Example Usage
 
 ```go
-    package main
+package main
 
-    import "fmt"
+import "fmt"
 
-    func main() {
-        fmt.Println("Hello, Pipes")
-    }
+func main() {
+    fmt.Println("Hello, Pipes")
+}
 ```
 
 #### Contributions
