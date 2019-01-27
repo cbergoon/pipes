@@ -53,7 +53,7 @@ process which make HTTP requests.
 
 Inputs and outputs are named "ports" that the processes use to communicate.
 
-the state of a process is set of definable initial data which is specifically defined per process instance.
+The state of a process is set of definable initial data which is specifically defined per process instance.
 
 There are currently four built-in process types: HTTP, JSON, DYNAMICJS, and GENERATOR.
 
