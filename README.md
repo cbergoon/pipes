@@ -6,7 +6,9 @@
 </p>
 
 Pipes provides the ability to rapidly define an application using prebuilt components (processes) that are dynamically
-defined. For now Pipes is just an experiment.
+defined. Pipes is a proof of concept and should not be used in production yet.
+
+![flow](/resources/pipes-diagram.png)
 
 #### Features
 
@@ -76,6 +78,28 @@ import "fmt"
 func main() {
     fmt.Println("Hello, Pipes")
 }
+```
+
+#### Example Pipes Definition Language
+
+```pdl
+CREATE PIPELINE "MyPipeline";
+
+ADD "Alfa" OF "Generator" OUTPUTS = ("Out1", "Out2");
+ADD "Beta" OF "DynamicJs"
+    INPUTS = ("In1", "In2")
+    OUTPUTS = ("Out")
+    SET "src" = 'o = {
+        "MyVal": In1 + "hello" + In2
+    };
+    console.log("hellofrom js");
+    Out = JSON.stringify(o);',
+    "gg" = "kk";
+ADD SINK "Charlie" OF "Printer" INPUTS = ("In");
+
+CONNECT "Alfa":"Out1" TO "Beta":"In1";
+CONNECT "Alfa":"Out2" TO "Beta":"In2";
+CONNECT "Beta":"Out" TO "Charlie":"In";
 ```
 
 #### Contributions
