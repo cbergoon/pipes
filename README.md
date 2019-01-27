@@ -45,17 +45,26 @@ define the flow of messages and execution through the pipeline.
 
 ##### Processes
 
-###### JSON File Process
+Processes are the main parts of a process. These are similar to functions in a traditional program and define the logic
+of the pipeline. Processes consist of a name, type, input ports, output ports, and a state.
 
-###### HTTP Process
+The type of the process specifies which of the built in types the process should use. An example of type is an HTTP
+process which make HTTP requests.
 
-###### DynamicJs Process
+Inputs and outputs are named "ports" that the processes use to communicate.
+
+the state of a process is set of definable initial data which is specifically defined per process instance.
+
+There are currently four built-in process types: HTTP, JSON, DYNAMICJS, and GENERATOR.
 
 ##### Connections
 
+Connections define the flow of the pipeline. A complete pipeline's connections will form a subset of a p-graph where only
+one start and end vertex exists. Connections pass JSON data.
+
 ##### Pipelines
 
-##### JSON Pipeline Definition
+Pipelines represent the entire flow through the application.
 
 #### Example Usage
 
