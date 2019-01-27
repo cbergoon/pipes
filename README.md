@@ -20,7 +20,7 @@ defined. For now Pipes is just an experiment.
 * FUTURE: External plugin system for process blocks running as their own process in any language.
 * FUTURE: Built-in database processes.
 
-NEW: A definition language for pipes called [pipes-dl](github.com/cbergoon/pipes-dl) is also available. This provides a simple
+NEW: A definition language for pipes called [pipes-dl](https://github.com/cbergoon/pipes-dl) is also available. This provides a simple
 DSL that can be used to define a pipeline.
 
 #### Installation
