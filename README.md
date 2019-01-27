@@ -8,8 +8,6 @@
 Pipes provides the ability to rapidly define an application using prebuilt components (processes) that are dynamically
 defined. Pipes is a proof of concept and should not be used in production yet.
 
-![flow](/resources/pipes-diagram.png)
-
 #### Features
 
 * Concurrent execution of pipeline paths.
@@ -24,6 +22,8 @@ defined. Pipes is a proof of concept and should not be used in production yet.
 
 NEW: A definition language for pipes called [pipes-dl](https://github.com/cbergoon/pipes-dl) is also available. This provides a simple
 DSL that can be used to define a pipeline.
+
+![flow](/resources/pipes-diagram.png)
 
 #### Installation
 
