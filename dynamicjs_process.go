@@ -1,6 +1,8 @@
 package pipes
 
 import (
+	"fmt"
+
 	"github.com/robertkrimen/otto"
 )
 
@@ -46,7 +48,10 @@ func (c *DynamicJsProcess) Run() {
 		for k, v := range inputData {
 			vm.Set(k, v)
 		}
-		vm.Run(src)
+		_, err := vm.Run(src)
+		if err != nil {
+			fmt.Println(err)
+		}
 		for _, v := range c.Outputs {
 			val, _ := vm.Get(v)
 			c.FlowProcess.Outputs[v] <- val.String()

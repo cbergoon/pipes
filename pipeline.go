@@ -69,7 +69,7 @@ type FlowPipeline struct {
 	StateChangeEnable           bool
 	StateChangedCallbacksEnable bool
 	StateChangedCallbackFn      func(state PipelineState)
-	stateMux                    sync.Mutex
+	stateMux                    sync.RWMutex
 	State                       *PipelineState
 }
 
@@ -91,7 +91,7 @@ func NewPipeline(name string, stateChangedEnabled bool, stateChangedCallbackEnab
 		StateChangeEnable:           stateChangedEnabled,
 		StateChangedCallbacksEnable: stateChangedCallbackEnabled,
 		StateChangedCallbackFn:      stateChangedCallbackFn,
-		State:                       state,
+		State: state,
 	}
 }
 
@@ -189,8 +189,12 @@ func (f *FlowPipeline) ProcessStateChanged(state *ProcessState) {
 		f.stateMux.Lock()
 		f.State.ProcessStates[state.ProcessName] = state
 		f.State.Errors = f.Errors
-		f.StateChangedCallbackFn(*f.State)
 		f.stateMux.Unlock()
+		if f.StateChangedCallbackFn != nil {
+			f.stateMux.RLock()
+			f.StateChangedCallbackFn(*f.State)
+			f.stateMux.RUnlock()
+		}
 	}
 }
 
@@ -199,5 +203,7 @@ func (f *FlowPipeline) IsProcessStateChangedEnabled() bool {
 }
 
 func (f *FlowPipeline) GetPipelineState() *PipelineState {
+	f.stateMux.RLock()
+	defer f.stateMux.RUnlock()
 	return f.State
 }

@@ -2,6 +2,7 @@ package pipes
 
 import (
 	"fmt"
+	"time"
 )
 
 type GeneratorProcess struct {
@@ -28,7 +29,7 @@ func NewGeneratorProcess(processName string, inputs, outputs []string, state map
 func (c *GeneratorProcess) Run() {
 	for i := 1; i <= 5; i++ {
 		c.FlowProcess.Outputs["Out1"] <- fmt.Sprintf("Hi for the %d'th time!", i)
-		//c.FlowProcess.Outputs["Out2"] <- fmt.Sprintf("Cameron")
+		time.Sleep(time.Second)
 	}
 
 	for _, v := range c.FlowProcess.Outputs {
