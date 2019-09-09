@@ -12,7 +12,7 @@ The goal of pipes is to provide a black box programming model that enables devel
 
 For now Pipes is a proof of concept and should not be used in production.
 
-#### Features
+### Features
 
 * Concurrent execution of pipeline paths.
 * Dynamic Javascript process.
@@ -30,7 +30,7 @@ For now Pipes is a proof of concept and should not be used in production.
 
 ![flow](/docs/images/pipes-diagram.png)
 
-#### Installation
+### Installation
 
 Get the source with ```go get```:
 
@@ -46,7 +46,7 @@ import "github.com/cbergoon/pipes/pkg/dl"
 import "github.com/cbergoon/pipes/pkg/pool"
 ```
 
-#### Documentation
+### Documentation
 
 A Pipes pipeline consists of two main concepts: processes and connections. As you might have guessed a processes are
 are linked and communicate via connections to form a pipeline. These connections also define the process graph which
@@ -54,7 +54,7 @@ define the flow of messages and execution through the pipeline.
 
 Also see the [godocs](https://godoc.org/github.com/cbergoon/pipes) and the [docs](/docs/README.md) directory.
 
-#### Pipelines
+### Pipelines
 
 Pipelines represent the entire flow through the application formed by a group of Processes and Connections. Pipelines always
 start with a generator type (a process with only outputs) and always end with a 'sink' type (a process with only inputs). 
@@ -63,7 +63,7 @@ Process components that make up the middle have both inputs and outputs with var
 Pipelines may be completely sequential, or branch off into concurrently executed components. All pipelines have at most one 
 'generator' and one 'sink'. 
 
-#### Processes
+### Processes
 
 In pipes, processes are components that handle specific operations or tasks. These building blocks are composable and 
 customizable. Processes have similar characteristics to a function and can be connected and invoked by other components 
@@ -81,7 +81,7 @@ The state of a process is set of definable initial data which is specifically de
 There are currently four built-in process types: HTTP, JSON, DYNAMICJS, and GENERATOR. Additional official plugins can be 
 found in the /plugins directory at the root of the project. In the future, we hope to have a community plugin repository. 
 
-#### Connections
+### Connections
 
 Connections define the flow of the pipeline. A complete pipeline's connections will form a subset of a p-graph where only
 one start and end vertex exists. Connections pass JSON data amongst process blocks. 
@@ -94,22 +94,22 @@ primitives.
 Process ports are blocking which means that if a process has 4 input ports all 4 MUST receive a message in order for the process 
 to continue.
 
-#### Plugins
+### Plugins
 
 Custom processes can be built by creating a plugin that implements the process API. More information about using and creating custom 
 processes can be found [here](/docs/plugins.md).
 
-#### Definition Language
+### Definition Language
 
 The definition language allows entire pipelines to be scripted. This provides a human readable representation and a way to preserve 
 and replicate pipelines. A readable language also simplifies reuse of process components. 
 
-#### Worker Pool
+### Worker Pool
 
 The worker pool provides a safe way to execute many pipelines at once with varying workloads in a way that preserves and extends the 
 existing pipeline API and state. 
 
-#### Example Usage
+### Example Usage
 
 ```go
 package main
@@ -121,7 +121,7 @@ func main() {
 }
 ```
 
-#### Example Pipes Definition Language
+### Example Pipes Definition Language
 
 ```pdl
 CREATE PIPELINE "MyPipeline";
@@ -143,10 +143,10 @@ CONNECT "Alfa":"Out2" TO "Beta":"In2";
 CONNECT "Beta":"Out" TO "Charlie":"In";
 ```
 
-#### Contributions
+### Contributions
 
 All contributions are welcome.
 
-#### License
+### License
 
 This project is licensed under the MIT License.
