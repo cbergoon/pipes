@@ -46,6 +46,8 @@ import "github.com/cbergoon/pipes/pkg/dl"
 import "github.com/cbergoon/pipes/pkg/pool"
 ```
 
+---
+
 ### Documentation
 
 A Pipes pipeline consists of two main concepts: processes and connections. As you might have guessed a processes are
@@ -108,6 +110,8 @@ and replicate pipelines. A readable language also simplifies reuse of process co
 
 The worker pool provides a safe way to execute many pipelines at once with varying workloads in a way that preserves and extends the 
 existing pipeline API and state. 
+
+---
 
 ### Example Usage
 
