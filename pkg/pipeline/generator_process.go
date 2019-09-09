@@ -1,4 +1,4 @@
-package pipes
+package pipeline
 
 import (
 	"fmt"

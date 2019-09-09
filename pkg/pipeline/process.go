@@ -1,4 +1,4 @@
-package pipes
+package pipeline
 
 type Process interface {
 	Initialize()

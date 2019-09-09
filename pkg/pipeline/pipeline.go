@@ -1,6 +1,9 @@
-package pipes
+package pipeline
 
 import (
+	"fmt"
+	"os"
+	"plugin"
 	"sync"
 	"time"
 
@@ -91,15 +94,33 @@ func NewPipeline(name string, stateChangedEnabled bool, stateChangedCallbackEnab
 		StateChangeEnable:           stateChangedEnabled,
 		StateChangedCallbacksEnable: stateChangedCallbackEnabled,
 		StateChangedCallbackFn:      stateChangedCallbackFn,
-		State: state,
+		State:                       state,
 	}
 }
 
-func NewPipelineFromPipelineDefinition(definition *PipelineDefinition, stateChangedEnabled bool, stateChangedCallbackEnabled bool, stateChangedCallbackFn func(state PipelineState)) (*FlowPipeline, error) {
+func NewPipelineFromPipelineDefinition(definition *PipelineDefinition, pluginMap map[string]*plugin.Plugin, stateChangedEnabled bool, stateChangedCallbackEnabled bool, stateChangedCallbackFn func(state PipelineState)) (*FlowPipeline, error) {
 	pipeline := NewPipeline(definition.Pipeline.Name, stateChangedEnabled, stateChangedCallbackEnabled, stateChangedCallbackFn)
 	for _, proc := range definition.Processes {
-		//TODO: Create a factory to replace conditional logic.
-		if proc.TypeName == "Http" {
+		if _, ok := pluginMap[proc.TypeName]; ok {
+			plug := pluginMap[proc.TypeName]
+
+			symLogger, err := plug.Lookup("New")
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+
+			plugedNewProcess, ok := symLogger.(func(processName string, inputs, outputs []string, state map[string]string) Process)
+			if !ok {
+				fmt.Println("unexpected type from module symbol")
+				os.Exit(1)
+			}
+
+			err = pipeline.AddProcess(proc.ProcessName, plugedNewProcess(proc.ProcessName, proc.Inputs, proc.Outputs, proc.State), proc.Sink)
+			if err != nil {
+				return nil, errors.Wrapf(err, "could not create pipeline; specified process %s of type %s could not be created", proc.ProcessName, proc.TypeName)
+			}
+		} else if proc.TypeName == "Http" {
 			err := pipeline.AddProcess(proc.ProcessName, NewHttpProcess(proc.ProcessName, proc.Inputs, proc.Outputs, proc.State), proc.Sink)
 			if err != nil {
 				return nil, errors.Wrapf(err, "could not create pipeline; specified process %s of type %s could not be created", proc.ProcessName, proc.TypeName)
